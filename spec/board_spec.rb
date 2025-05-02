@@ -15,4 +15,29 @@ describe Board do
       expect(fields_count).to eq(64)
     end
   end
+
+  describe('#valid_move?') do
+    before do
+      board.create
+    end
+    it('returns true left_up (0, 0] position') do
+      valid = board.valid_move?(0, 4)
+      expect(valid).to eq(true)
+    end
+
+    it('returns true for right,  down (7,7) position') do
+      valid = board.valid_move?(7, 7)
+      expect(valid).to eq(true)
+    end
+
+    it('returns false for negeative position') do
+      valid = board.valid_move?(-1, -1)
+      expect(valid).to eq(false)
+    end
+
+    it('returns false for after position over board') do
+      valid = board.valid_move?(8, 8)
+      expect(valid).to eq(false)
+    end
+  end
 end

@@ -16,4 +16,11 @@ class Board
       end
     end
   end
+
+  def valid_move?(x, y)
+    height = @fields.length
+    width = @fields[0].length
+
+    y < height && x < width && x >= 0 && y >= 0
+  end
 end
