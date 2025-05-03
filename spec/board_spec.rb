@@ -40,4 +40,23 @@ describe Board do
       expect(valid).to eq(false)
     end
   end
+
+  describe '#enemy_at_position' do
+    let(:own_figure) { double('own_figure', { direction: -1 }) }
+    let(:occupied_figure) { double('figure', { direction: 1 }) }
+    let(:another_figure) { double('figure', { occupying: occupied_figure }) }
+
+    before do
+      allow(board).to receive(:fields).and_return([[another_figure]])
+    end
+    it('returns true for enemy') do
+      result = board.enemy_at_position?(own_figure, 0, 0)
+      expect(result).to eq(true)
+    end
+
+    it('returns false for own') do
+      result = board.enemy_at_position?(occupied_figure, 0, 0)
+      expect(result).to eq(false)
+    end
+  end
 end
