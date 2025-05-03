@@ -1,5 +1,5 @@
 class Figure
-  attr_reader :moves_count, :x, :y, :position_history
+  attr_reader :moves_count, :x, :y, :position_history, :direction
 
   def initialize(current_x, current_y, direction = -1)
     @direction = direction

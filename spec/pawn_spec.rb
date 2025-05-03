@@ -1,7 +1,8 @@
 require './lib/ruby_chess/pawn'
 describe Pawn do
   subject(:pawn) { described_class.new(1, 3, -1) }
-  let(:another_figure) { double('figure', { occupying: true }) }
+  let(:another_figure) { double('figure', { occupying: occupied_figure }) }
+  let(:occupied_figure) { double('figure', { direction: 1 }) }
   let(:empty_field) { double('empty_field', { occupying: nil }) }
   let(:board) { double('board') }
   describe '#available_moves' do
@@ -79,7 +80,16 @@ describe Pawn do
     end
 
     context 'when it has en passant available' do
+      before do
+        allow(board).to receive(:fields).and_return([[nil, nil, nil],
+                                                     [nil, empty_field, nil],
+                                                     [empty_field, another_figure, empty_field],
+                                                     [another_figure, pawn, another_figure]])
+      end
+
       xit('returns en passant move') do
+        result = pawn.available_moves(board)
+        expect(result).to eq([[0, 2], [2, 2]])
       end
     end
   end
