@@ -1,20 +1,23 @@
 class Figure
-  attr_reader :moves_count, :x, :y
+  attr_reader :moves_count, :x, :y, :position_history
 
   def initialize(current_x, current_y, direction = -1)
     @direction = direction
     @x = current_x
     @y = current_y
+    @position_history = []
     @moves_count = 0
   end
 
-  def proceed_move(x, y)
-    return unless x.is_a? Integer
-    return unless y.is_a? Integer
+  def proceed_move(new_x, new_y)
+    return unless new_x.is_a? Integer
+    return unless new_y.is_a? Integer
 
     @moves_count += 1
-    @x = x
-    @y = y
+    @position_history.push([x, y])
+
+    @x = new_x
+    @y = new_y
   end
 
   def symbol

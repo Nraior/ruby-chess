@@ -15,5 +15,9 @@ describe Figure do
     it('does not updates x & y that is not integer') do
       expect { figure.proceed_move('2', '5') }.not_to(change { [figure.x, figure.y] })
     end
+
+    it('updates last move') do
+      expect { figure.proceed_move(3, 3) }.to change { figure.position_history }.to([[0, 1]])
+    end
   end
 end
