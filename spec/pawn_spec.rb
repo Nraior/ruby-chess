@@ -83,7 +83,7 @@ describe Pawn do
       end
     end
 
-    context 'when it has en passant available' do
+    context 'en passant' do
       let(:occupied_figure) { Pawn.new(0, 0, 1) }
       let(:another_figure) { double('figure', { occupying: occupied_figure }) }
 
@@ -92,15 +92,41 @@ describe Pawn do
                                                      [nil, empty_field, nil],
                                                      [empty_field, another_figure, empty_field],
                                                      [another_figure, pawn, another_figure]])
-        occupied_figure.proceed_move(2, 2)
         allow(board).to receive(:enemy_at_position?).with(anything, 2, 3).and_return(true)
         allow(board).to receive(:enemy_at_position?).with(anything, 0, 3).and_return(true)
         allow(occupied_figure).to receive(:is_a?).and_return(true)
       end
 
-      it('returns en passant move') do
-        result = pawn.available_moves(board)
-        expect(result).to eq([[0, 2], [2, 2]])
+      context 'when it has en passant available' do
+        before do
+          occupied_figure.proceed_move(2, 2)
+        end
+        it('returns en passant move') do
+          result = pawn.available_moves(board)
+          expect(result).to eq([[0, 2], [2, 2]])
+        end
+      end
+
+      context 'when en passant unavailable because of not double move' do
+        before do
+          occupied_figure.proceed_move(1, 1)
+        end
+        it('returns false') do
+          result = pawn.available_moves(board)
+          expect(result).to eq([])
+        end
+      end
+
+      context 'when there was two moves, and first was double' do
+        before do
+          occupied_figure.proceed_move(2, 2)
+          occupied_figure.proceed_move(1, 1)
+        end
+
+        it('returns false') do
+          result = pawn.available_moves(board)
+          expect(result).to eq([])
+        end
       end
     end
   end
