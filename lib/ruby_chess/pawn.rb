@@ -8,6 +8,8 @@ class Pawn < Figure
 
     arr.push(kill_moves) # unless available_kill_moves(board).empty?
 
+    en_passant = check_en_passant_moves(board)
+    arr.push(en_passant)
     arr.flatten(1)
   end
 
@@ -36,29 +38,35 @@ class Pawn < Figure
 
   def available_kill_moves(board)
     moves = []
-    fields = board.fields
+    enemy_forward_left = board.enemy_at_position?(self, @x - 1, @y + @direction)
+    enemy_forward_right = board.enemy_at_position?(self, @x - 1, @y + @direction)
 
-    upper_left_valid = board.valid_move?(@x - 1, @y + @direction)
-    upper_right_valid = board.valid_move?(@x + 1, @y + @direction)
-
-    upper_left = fields[@y + direction][@x - 1].occupying
-
-    upper_left_eglible_enemy = upper_left_valid && !upper_left.nil? && upper_left.direction != direction
-
-    upper_right = fields[@y + direction][@x + 1].occupying
-    upper_right_eglible_enemy = upper_right_valid && !upper_right.nil? && upper_right.direction != direction
-
-    moves.push([@x - 1, @y + @direction]) if upper_left_eglible_enemy
-    moves.push([@x + 1, @y + @direction]) if upper_right_eglible_enemy
+    moves.push([@x - 1, @y + @direction]) if enemy_forward_left
+    moves.push([@x + 1, @y + @direction]) if enemy_forward_right
 
     moves
   end
 
-  def check_en_passant_moves(board)
-    fields = board.fields
-    left = fields[@y][@x - 1] if board.valid_move?(@x - 1, @y)
-    right = fields[@y][@x + 1] if board.valid_move?(@x + 1, @y)
+  def last_move_double_forward?
+    return false if position_history.length != 1
 
+    (position_history[0][1] - y).abs == 2
+  end
+
+  def check_en_passant_moves(board)
+    moves = []
+    fields = board.fields
+
+    left = fields[@y][@x - 1].occupying if board.enemy_at_position?(self, @x - 1, @y)
+    right = fields[@y][@x + 1].occupying if board.enemy_at_position?(self, @x + 1, @y)
+
+    valid_left = left&.is_a?(self.class) && left.last_move_double_forward?
+    valid_right = right&.is_a?(self.class) && right.last_move_double_forward?
+
+    moves.push([@x - 1, @y + direction]) if valid_left
+    moves.push([@x + 1, @y + direction]) if valid_right
+
+    moves
     # left_eglible_for_kill = left && left.
   end
 end
