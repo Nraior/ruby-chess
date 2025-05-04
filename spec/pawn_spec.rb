@@ -1,4 +1,4 @@
-require './lib/ruby_chess/pawn'
+require './lib/ruby_chess/figures/pawn'
 describe Pawn do
   subject(:pawn) { described_class.new(1, 3, -1) }
   let(:occupied_figure) { instance_double(Pawn,  direction: 1, position_history: [[0, 0]]) }

@@ -25,6 +25,6 @@ class Figure
   end
 
   def available_moves(board)
-    throw 'Error'
+    [@x, @y]
   end
 end
