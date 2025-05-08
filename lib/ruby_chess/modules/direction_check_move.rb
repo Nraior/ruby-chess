@@ -28,11 +28,12 @@ module DirectionCheckMove
   private
 
   def check_direction(board, x, y, moves = [], x_direction = -1, y_direction = 0)
-    return moves if !board.valid_move?(x + x_direction,
-                                       y + y_direction) && !board.enemy_at_position?(self, x + x_direction,
-                                                                                     y + y_direction)
+    return moves unless board.valid_move?(x + x_direction,
+                                          y + y_direction)
 
     moves.push([x + x_direction, y + y_direction])
+
+    return moves if board.enemy_at_position?(self, x + x_direction, y + y_direction)
 
     check_direction(board, x + x_direction, y + y_direction, moves, x_direction, y_direction)
   end
