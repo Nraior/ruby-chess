@@ -31,9 +31,12 @@ module DirectionCheckMove
     return moves unless board.valid_move?(x + x_direction,
                                           y + y_direction)
 
+    next_figure = board.figure_at_position(x + x_direction, y + y_direction)
+    return moves if ally?(next_figure)
+
     moves.push([x + x_direction, y + y_direction])
 
-    return moves if board.enemy_at_position?(self, x + x_direction, y + y_direction)
+    return moves if enemy?(next_figure)
 
     fields = board.fields
     return moves unless fields[y + y_direction][x + x_direction].occupying.nil?
