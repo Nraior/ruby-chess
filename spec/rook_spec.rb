@@ -23,7 +23,7 @@ describe Rook do
       end
     end
     context 'when its alone' do
-      it 'returns valid positions' do
+      it 'returns cross positions' do
         result = rook.available_moves(board)
         expect(result).to eq([[1, 2], [0, 2], [3, 2], [4, 2], [2, 1], [2, 0], [2, 3], [2, 4]])
       end
@@ -39,7 +39,7 @@ describe Rook do
                                                       empty_field],
                                                      [empty_field, empty_field, empty_field, empty_field, empty_field]])
       end
-      it 'returns first figures' do
+      it 'returns first cross figures' do
         result = rook.available_moves(board)
         expect(result).to eq([[1, 2], [3, 2], [2, 1], [2, 3]])
       end
