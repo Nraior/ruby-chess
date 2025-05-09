@@ -14,7 +14,9 @@ describe Pawn do
       allow(board).to receive(:width).and_return(3)
       allow(board).to receive(:height).and_return(4)
       allow(board).to receive(:valid_move?).and_return(true)
-      allow(board).to receive(:enemy_at_position?).and_return(false)
+      allow(board).to receive(:figure_at_position) do |x, y|
+        board.fields[y][x]&.occupying
+      end
       allow(occupied_figure).to receive(:class).and_return(Pawn)
     end
 
@@ -74,8 +76,6 @@ describe Pawn do
                                                      [nil, empty_field, nil],
                                                      [another_figure, another_figure, another_figure],
                                                      [nil, pawn, nil]])
-        allow(board).to receive(:enemy_at_position?).and_return(true)
-        allow(board).to receive(:enemy_at_position?).with(anything, anything, 3).and_return(false)
       end
       it 'returns diagonal moves as kill' do
         result = pawn.available_moves(board)
@@ -92,8 +92,6 @@ describe Pawn do
                                                      [nil, empty_field, nil],
                                                      [empty_field, another_figure, empty_field],
                                                      [another_figure, pawn, another_figure]])
-        allow(board).to receive(:enemy_at_position?).with(anything, 2, 3).and_return(true)
-        allow(board).to receive(:enemy_at_position?).with(anything, 0, 3).and_return(true)
         allow(occupied_figure).to receive(:is_a?).and_return(true)
       end
 

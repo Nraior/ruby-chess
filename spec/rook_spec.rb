@@ -27,7 +27,7 @@ describe Rook do
       end
     end
 
-    context 'when its blocked' do
+    context 'when its blocked by enemy figures' do
       before do
         allow(board).to receive(:fields).and_return([[empty_field, empty_field, empty_field, empty_field, empty_field],
                                                      [empty_field, empty_field, another_figure, empty_field,
@@ -59,6 +59,28 @@ describe Rook do
       it 'returns correct figures' do
         result = rook.available_moves(board)
         expect(result).to eq([[1, 2], [3, 2], [4, 2], [2, 1], [2, 0], [2, 3]])
+      end
+    end
+
+    context 'when its blocked by own figures' do
+      let(:occupied_figure) { double('pawn', { direction: -1 }) }
+      let(:own_figure) { double('figure', { occupying: occupied_figure }) }
+
+      before do
+        allow(board).to receive(:fields).and_return([[empty_field, empty_field, empty_field, empty_field, empty_field],
+                                                     [empty_field, empty_field, own_figure, empty_field,
+                                                      empty_field],
+                                                     [empty_field, own_figure, rook, own_figure, empty_field],
+                                                     [empty_field, empty_field, own_figure, empty_field,
+                                                      empty_field],
+                                                     [empty_field, empty_field, empty_field, empty_field, empty_field]])
+
+        allow(board).to receive(:enemy_at_position?).and_return(false)
+      end
+
+      it 'returns nothing' do
+        result = rook.available_moves(board)
+        expect(result).to eq([[]])
       end
     end
   end

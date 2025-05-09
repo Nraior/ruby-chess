@@ -27,7 +27,7 @@ class Pawn < Figure
     loop_iterator.each do |n|
       x_pos = @x
 
-      next unless board.valid_move?(n, x_pos)
+      return moves unless board.valid_move?(n, x_pos)
 
       return moves unless fields[n][x_pos].occupying.nil?
 
@@ -38,8 +38,11 @@ class Pawn < Figure
 
   def available_kill_moves(board)
     moves = []
-    enemy_forward_left = board.enemy_at_position?(self, @x - 1, @y + @direction)
-    enemy_forward_right = board.enemy_at_position?(self, @x - 1, @y + @direction)
+    left_figure = board.figure_at_position(@x - 1, @y + @direction)
+    right_figure = board.figure_at_position(@x - 1, @y + @direction)
+
+    enemy_forward_left = enemy?(left_figure) if left_figure
+    enemy_forward_right = enemy?(right_figure) if right_figure
 
     moves.push([@x - 1, @y + @direction]) if enemy_forward_left
     moves.push([@x + 1, @y + @direction]) if enemy_forward_right
@@ -57,8 +60,8 @@ class Pawn < Figure
     moves = []
     fields = board.fields
 
-    left = fields[@y][@x - 1].occupying if board.enemy_at_position?(self, @x - 1, @y)
-    right = fields[@y][@x + 1].occupying if board.enemy_at_position?(self, @x + 1, @y)
+    left = fields[@y][@x - 1].occupying if enemy?(board.figure_at_position(@x - 1, @y))
+    right = fields[@y][@x + 1].occupying if enemy?(board.figure_at_position(@x + 1, @y))
 
     valid_left = left&.is_a?(self.class) && left.last_move_double_forward?
     valid_right = right&.is_a?(self.class) && right.last_move_double_forward?
@@ -67,6 +70,5 @@ class Pawn < Figure
     moves.push([@x + 1, @y + direction]) if valid_right
 
     moves
-    # left_eglible_for_kill = left && left.
   end
 end

@@ -4,6 +4,10 @@ require './lib/ruby_chess/field'
 describe Board do
   subject(:board) { described_class.new(8, 8) }
   let(:field) { double('field') }
+  let(:occupied_figure) { double('figure', { direction: 1 }) }
+  let(:another_figure) { double('figure', { occupying: occupied_figure }) }
+  let(:empty_field) { double('figure', { occupying: nil }) }
+
   describe('#create') do
     before do
       allow(Field).to receive(:new).and_return(field)
@@ -43,8 +47,6 @@ describe Board do
 
   describe '#enemy_at_position' do
     let(:own_figure) { double('own_figure', { direction: -1 }) }
-    let(:occupied_figure) { double('figure', { direction: 1 }) }
-    let(:another_figure) { double('figure', { occupying: occupied_figure }) }
 
     before do
       allow(board).to receive(:fields).and_return([[another_figure]])
@@ -57,6 +59,26 @@ describe Board do
     it('returns false for own') do
       result = board.enemy_at_position?(occupied_figure, 0, 0)
       expect(result).to eq(false)
+    end
+  end
+
+  describe '#figure_at_position' do
+    before do
+      allow(board).to receive(:fields).and_return([[another_figure, empty_field]])
+    end
+    it 'returns nil for incorrect pos' do
+      result = board.figure_at_position(-1, -1)
+      expect(result).to eq(nil)
+    end
+
+    it 'returns figure for correct field' do
+      result = board.figure_at_position(0, 0)
+      expect(result).to eq(occupied_figure)
+    end
+
+    it 'returns nil for empty field' do
+      result = board.figure_at_position(0, 1)
+      expect(result).to eq(nil)
     end
   end
 end

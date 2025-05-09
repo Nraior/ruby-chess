@@ -24,6 +24,13 @@ class Board
     y < height && x < width && x >= 0 && y >= 0
   end
 
+  def figure_at_position(x, y)
+    return nil unless valid_move?(x, y)
+
+    field = fields[y][x]
+    field&.occupying
+  end
+
   def enemy_at_position?(own_figure, enemy_x, enemy_y)
     return false unless valid_move?(enemy_x, enemy_y)
 

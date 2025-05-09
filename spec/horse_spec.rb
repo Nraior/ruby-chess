@@ -1,0 +1,2 @@
+describe Horse do
+end

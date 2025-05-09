@@ -35,6 +35,9 @@ module DirectionCheckMove
 
     return moves if board.enemy_at_position?(self, x + x_direction, y + y_direction)
 
+    fields = board.fields
+    return moves unless fields[y + y_direction][x + x_direction].occupying.nil?
+
     check_direction(board, x + x_direction, y + y_direction, moves, x_direction, y_direction)
   end
 end

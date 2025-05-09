@@ -27,4 +27,16 @@ class Figure
   def available_moves(board)
     [@x, @y]
   end
+
+  def enemy?(other_figure)
+    return false if other_figure.nil?
+
+    other_figure.direction != direction
+  end
+
+  def ally?(other_figure)
+    return false if other_figure.nil?
+
+    other_figure.direction == direction
+  end
 end
