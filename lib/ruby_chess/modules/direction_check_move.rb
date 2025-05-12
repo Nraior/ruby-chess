@@ -13,9 +13,8 @@ module DirectionCheckMove
   end
 
   def diagonal_moves(board)
-    moves = cross_move
-
-    left_up_moves = check_direction(board, x, y, -1, -1)
+    moves = []
+    left_up_moves = check_direction(board, x, y, [], -1, -1)
     right_up_moves = check_direction(board, x, y, [], 1, -1)
     left_down_moves = check_direction(board, x, y, [], -1, 1)
     left_right_moves = check_direction(board, x, y, [], 1, 1)
