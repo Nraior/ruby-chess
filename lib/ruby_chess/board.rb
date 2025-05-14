@@ -48,7 +48,7 @@ class Board
   end
 
   def update_figure_pos(figure, new_x, new_y)
-    board[y][x] = nil
-    board[new_y][new_x] = figure
+    board[y][x].free
+    board[new_y][new_x].occupy(figure)
   end
 end
