@@ -41,9 +41,10 @@ class Board
   end
 
   def team_king(direction)
-    fields.each do |field|
+    fields.flatten.each do |field|
       return field.occupying if field.occupying&.direction == direction && field.occupying.is_a?(King)
     end
+    nil
   end
 
   def update_figure_pos(figure, new_x, new_y)
