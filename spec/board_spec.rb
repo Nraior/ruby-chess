@@ -64,4 +64,33 @@ describe Board do
       expect(result).to eq(nil)
     end
   end
+
+  describe '#team_figures' do
+    let(:empty_field) { double('empty_field', { occupying: nil }) }
+    let(:enemy_figure) { double('pawn', { direction: -1 }) }
+    let(:enemy_field) { double('figure', { occupying: enemy_figure }) }
+    let(:own_pawn) { double('pawn', { direction: 1 }) }
+    let(:own_field) { double('figure', { occupying: own_pawn }) }
+
+    before do
+      allow(board).to receive(:fields).and_return([[empty_field, empty_field, enemy_field, enemy_field, empty_field],
+                                                   [empty_field, empty_field, own_field, empty_field, empty_field],
+                                                   [empty_field, own_field, own_field, own_field, empty_field],
+                                                   [empty_field, empty_field, own_field, empty_field, empty_field],
+                                                   [empty_field, empty_field, empty_field, empty_field, empty_field]])
+    end
+    context 'when asking for own fields ' do
+      it 'returns team figures' do
+        figures = board.team_figures(1)
+        expect(figures).to eq([own_pawn, own_pawn, own_pawn, own_pawn, own_pawn])
+      end
+    end
+
+    context 'when asking for enemy fields' do
+      it 'returns enemy figures' do
+        figures = board.team_figures(-1)
+        expect(figures).to eq([enemy_figure, enemy_figure])
+      end
+    end
+  end
 end

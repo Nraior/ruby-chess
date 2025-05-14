@@ -1,4 +1,5 @@
 require_relative 'field'
+require_relative './figures/king'
 
 class Board
   attr_reader :fields, :width, :height
@@ -29,5 +30,24 @@ class Board
 
     field = fields[y][x]
     field&.occupying
+  end
+
+  def team_figures(direction)
+    figures = []
+    fields.flatten.each do |field|
+      figures.push(field.occupying) if field.occupying&.direction == direction
+    end
+    figures
+  end
+
+  def team_king(direction)
+    fields.each do |field|
+      return field.occupying if field.occupying&.direction == direction && field.occupying.is_a?(King)
+    end
+  end
+
+  def update_figure_pos(figure, new_x, new_y)
+    board[y][x] = nil
+    board[new_y][new_x] = figure
   end
 end
