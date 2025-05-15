@@ -1,7 +1,6 @@
 require './lib/ruby_chess/figures/pawn'
 describe Pawn do
   subject(:pawn) { described_class.new(1, 3, -1) }
-  let(:pawn_field) { double('empty_field', { occupying: pawn }) }
   let(:occupied_figure) { instance_double(Pawn, direction: 1, position_history: [[0, 0]]) }
   let(:another_figure) { double('figure', { occupying: occupied_figure }) }
   let(:empty_field) { double('empty_field', { occupying: nil }) }
@@ -13,7 +12,7 @@ describe Pawn do
       allow(board).to receive(:fields).and_return([[king_field, another_figure, empty_field],
                                                    [empty_field, another_figure, empty_field],
                                                    [empty_field, another_figure, empty_field],
-                                                   [empty_field, pawn_field, empty_field]])
+                                                   [empty_field, pawn, empty_field]])
       allow(board).to receive(:width).and_return(3)
       allow(board).to receive(:height).and_return(4)
       allow(board).to receive(:valid_move?).and_return(true)
@@ -22,35 +21,8 @@ describe Pawn do
         board.fields[y][x]&.occupying
       end
       allow(occupied_figure).to receive(:class).and_return(Pawn)
-
-      allow(board).to receive(:update_inside_field_element) do |x, y, figure|
-        p board.fields[y][x]
-        p board.fields[y][x].occupying
-        p 'enxt'
-        # p
-        board.fields[y][x].occupying = figure
-        # board.fields[y][x].occupy(figure)
-      end
-
-      allow(board).to receive(:team_figures) do |direction|
-        figures = []
-        p board.fields[0]
-        puts ''
-
-        p board.fields[1]
-        puts ''
-
-        p board.fields[2]
-        puts ''
-        p board.fields[3]
-
-        board.fields.flatten.each do |field|
-          # p field
-          # p field.occupying
-          figures.push(field.occupying) if field.occupying&.direction == direction
-        end
-        figures
-      end
+      allow(OwnChekmateChecker).to receive(:will_cause_own_checkmate?).and_return(false)
+      allow(OwnChekmateChecker).to receive(:en_passant_cause_own_checkmate?).and_return(false)
     end
 
     context('when its blocked and pawn is at the bottom') do
@@ -64,7 +36,7 @@ describe Pawn do
       subject(:pawn) { described_class.new(1, 0, 1) }
 
       before do
-        allow(board).to receive(:fields).and_return([[empty_field, pawn_field, empty_field],
+        allow(board).to receive(:fields).and_return([[empty_field, pawn, empty_field],
                                                      [empty_field, another_figure, empty_field],
                                                      [empty_field, another_figure, empty_field],
                                                      [king_field, another_figure, empty_field]])
@@ -80,7 +52,7 @@ describe Pawn do
         allow(board).to receive(:fields).and_return([[empty_field, empty_field, empty_field],
                                                      [empty_field, empty_field, empty_field],
                                                      [empty_field, empty_field, empty_field],
-                                                     [king_field, pawn_field, empty_field]])
+                                                     [king_field, pawn, empty_field]])
       end
       it('returns forward & two_forward moves') do
         result = pawn.available_moves(board)
@@ -93,11 +65,11 @@ describe Pawn do
         allow(board).to receive(:fields).and_return([[nil, nil, nil],
                                                      [empty_field, empty_field, empty_field],
                                                      [empty_field, empty_field, empty_field],
-                                                     [nil, pawn_field, nil]])
+                                                     [nil, pawn, nil]])
         allow(pawn).to receive(:moves_count).and_return(1)
       end
 
-      xit 'returns forward field' do
+      it 'returns forward field' do
         result = pawn.available_moves(board)
         expect(result).to eq([[1, 2]])
       end
@@ -110,7 +82,7 @@ describe Pawn do
                                                      [another_figure, another_figure, another_figure],
                                                      [nil, pawn, nil]])
       end
-      xit 'returns diagonal moves as kill' do
+      it 'returns diagonal moves as kill' do
         result = pawn.available_moves(board)
         expect(result).to eq([[0, 2], [2, 2]])
       end
@@ -132,7 +104,7 @@ describe Pawn do
         before do
           occupied_figure.proceed_move(2, 2)
         end
-        xit('returns en passant move') do
+        it('returns en passant move') do
           result = pawn.available_moves(board)
           expect(result).to eq([[0, 2], [2, 2]])
         end
@@ -142,7 +114,7 @@ describe Pawn do
         before do
           occupied_figure.proceed_move(1, 1)
         end
-        xit('returns false') do
+        it('returns false') do
           result = pawn.available_moves(board)
           expect(result).to eq([])
         end
@@ -154,7 +126,7 @@ describe Pawn do
           occupied_figure.proceed_move(1, 1)
         end
 
-        xit('returns false') do
+        it('returns false') do
           result = pawn.available_moves(board)
           expect(result).to eq([])
         end

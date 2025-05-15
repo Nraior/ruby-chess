@@ -74,7 +74,7 @@ class Pawn < Figure
     moves.push([@x + 1, @y + direction]) if valid_right
 
     moves.filter do |en_passant_move|
-      OwnChekmateChecker.en_passant_cause_own_checkmate?(self, board, en_passant_move[0], en_passant_move[1])
+      !OwnChekmateChecker.en_passant_cause_own_checkmate?(self, board, en_passant_move[0], en_passant_move[1])
     end
   end
 end
