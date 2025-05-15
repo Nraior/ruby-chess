@@ -47,8 +47,7 @@ class Board
     nil
   end
 
-  def update_figure_pos(figure, new_x, new_y)
-    board[y][x].free
-    board[new_y][new_x].occupy(figure)
+  def update_inside_field_element(x, y, figure = nil)
+    fields[y][x].occupy(figure)
   end
 end

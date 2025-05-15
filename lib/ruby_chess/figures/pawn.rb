@@ -1,4 +1,5 @@
 require_relative 'figure'
+require_relative '../own_checkmate_checker'
 class Pawn < Figure
   def available_moves(board)
     arr = []
@@ -6,11 +7,14 @@ class Pawn < Figure
     arr.push(standard_moves)
     kill_moves = available_kill_moves(board)
 
-    arr.push(kill_moves) # unless available_kill_moves(board).empty?
+    arr.push(kill_moves)
 
     en_passant = check_en_passant_moves(board)
     arr.push(en_passant)
-    arr.flatten(1)
+    arr.flatten!(1)
+    arr.filter do |move|
+      !OwnChekmateChecker.will_cause_own_checkmate?(self, board, move[0], move[1])
+    end
   end
 
   def forward_moves(board)
@@ -69,6 +73,8 @@ class Pawn < Figure
     moves.push([@x - 1, @y + direction]) if valid_left
     moves.push([@x + 1, @y + direction]) if valid_right
 
-    moves
+    moves.filter do |en_passant_move|
+      OwnChekmateChecker.en_passant_cause_own_checkmate?(self, board, en_passant_move[0], en_passant_move[1])
+    end
   end
 end

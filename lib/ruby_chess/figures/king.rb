@@ -1,4 +1,5 @@
 require_relative './figure'
+require_relative './rook'
 class King < Figure
   def available_moves(board)
     moves = standard_moves(board)
@@ -45,12 +46,18 @@ class King < Figure
     true
   end
 
-  def allow_castle_moves?(board)
+  def qualified_for_check_castle_left?(board)
     left_max = board[y][0].occupying
-    right_max = board[y][board[y].length - 1].occupying
 
-    left_is_rook = left_max.is_a?
+    left_is_rook = left_max.is_a? Rook
+    # left_max.
+
+    moves_count == 0 && left_is_rook && left_max.moves_count == 0
     # if ()
+  end
+
+  def check_left_castle_path
+    # needs to check if path to rook is clear and any field DO NOT result in check
   end
 
   def castle_moves

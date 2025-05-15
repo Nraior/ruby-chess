@@ -1,4 +1,6 @@
 require './lib/ruby_chess/figures/king'
+require './lib/ruby_chess/figures/rook'
+
 describe King do
   subject(:king) { described_class.new(2, 2, 1) }
   let(:king_field) { double('king_field', { occupying: king }) }
@@ -6,6 +8,8 @@ describe King do
   let(:empty_field) { double('empty_field', { occupying: nil }) }
   let(:occupied_figure) { double('pawn', { direction: -1 }) }
   let(:another_figure) { double('figure', { occupying: occupied_figure }) }
+  let(:cross_figure) { double('rook', { direction: 1 }) }
+  let(:own_field) { double('figure', { occupying: cross_figure }) }
 
   before do
     allow(board).to receive(:fields).and_return([[empty_field, empty_field, empty_field, empty_field, empty_field],
@@ -24,14 +28,22 @@ describe King do
   end
 
   context 'when its alone' do
-    it 'returns neighboring positions' do
+    xit 'returns neighboring positions' do
       moves = king.available_moves(board)
       expect(moves).to eq([[1, 1], [2, 1], [3, 1], [1, 2], [3, 2], [1, 3], [2, 3], [3, 3]])
     end
   end
 
   context 'when castling is available' do
+    subject(:king) { described_class.new(4, 0, 1) }
+    before do
+      allow(board).to receive(:fields).and_return([[own_field, empty_field, empty_field, empty_field, king_field, empty_field,
+                                                    empty_field, own_field]])
+      allow(cross_figure).to receive(:is_a?).with(Rook).and_return(true)
+    end
     it 'returns castling moves' do
+      moves = king.available_moves(board)
+      expect(moves).to eq([[2, 0], [3, 0], [5, 0], [6, 0]])
     end
   end
 

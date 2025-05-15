@@ -1,4 +1,4 @@
-require_relative 'figure'
+require_relative './figure'
 require_relative '../modules/direction_check_move'
 class Rook < Figure
   include DirectionCheckMove
