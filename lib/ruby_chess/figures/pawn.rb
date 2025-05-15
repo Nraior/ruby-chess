@@ -43,14 +43,13 @@ class Pawn < Figure
   def available_kill_moves(board)
     moves = []
     left_figure = board.figure_at_position(@x - 1, @y + @direction)
-    right_figure = board.figure_at_position(@x - 1, @y + @direction)
+    right_figure = board.figure_at_position(@x + 1, @y + @direction)
 
     enemy_forward_left = enemy?(left_figure) if left_figure
     enemy_forward_right = enemy?(right_figure) if right_figure
 
     moves.push([@x - 1, @y + @direction]) if enemy_forward_left
     moves.push([@x + 1, @y + @direction]) if enemy_forward_right
-
     moves
   end
 

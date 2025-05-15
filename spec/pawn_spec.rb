@@ -132,17 +132,5 @@ describe Pawn do
         end
       end
     end
-
-    context 'when one standard move would result in checkmate' do
-      let(:king_figure) { double('king', { direction: -1 }) }
-      before do
-        allow(board).to receive(:fields).and_return([[nil, another_figure, nil],
-                                                     [nil, another_figure, nil],
-                                                     [empty_field, another_figure, empty_field],
-                                                     [nil, pawn, nil]])
-      end
-      xit "doesn't return that move " do
-      end
-    end
   end
 end
