@@ -20,6 +20,7 @@ RSpec.shared_examples 'cross piece' do
       allow(board).to receive(:figure_at_position) do |x, y|
         board.fields[y][x].occupying
       end
+      allow(OwnChekmateChecker).to receive(:will_cause_own_checkmate?).and_return(false)
     end
     context 'when its alone' do
       it 'returns cross positions' do
