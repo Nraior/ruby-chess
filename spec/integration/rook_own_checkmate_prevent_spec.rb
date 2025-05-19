@@ -33,7 +33,21 @@ describe Rook do
     end
   end
 
-  context 'when cant prevent check' do
+  context 'when already preventing checkmate' do
+    subject(:rook) { described_class.new(2, 0, -1) }
+    let(:enemy_rook_first) { Rook.new(4, 0, 1) }
+    before do
+      allow(board).to receive(:fields).and_return([[king_field, Field.new(nil, nil), rook_field, Field.new(nil, nil), enemy_rook_field_first],
+                                                   [Field.new(nil, nil), Field.new(nil, nil), Field.new(nil, nil), Field.new(nil, nil),
+                                                    Field.new(nil, nil)]])
+    end
+    it 'returns only moves that still prevents checkmate ' do
+      moves = rook.legal_moves(board)
+      expect(moves).to eq([[1, 0], [3, 0], [4, 0]])
+    end
+  end
+
+  context 'when cant prevent checkmate' do
     let(:enemy_rook_first) { Rook.new(1, 0, 1) }
     subject(:rook) { described_class.new(2, 1, -1) }
     before do
