@@ -10,6 +10,16 @@ class Board
     @fields = []
   end
 
+  def display
+    fields.each do |field_row|
+      row_str = ''
+      field_row.each do |field|
+        row_str += field.occupying.class.to_s + ' '
+      end
+      p row_str
+    end
+  end
+
   def create
     @fields = Array.new(@height) do |y|
       Array.new(@width) do |x|

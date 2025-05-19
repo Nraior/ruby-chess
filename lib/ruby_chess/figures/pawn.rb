@@ -9,11 +9,21 @@ class Pawn < Figure
 
     arr.push(kill_moves)
 
-    en_passant = check_en_passant_moves(board)
+    en_passant = en_passant_moves(board)
     arr.push(en_passant)
     arr.flatten!(1)
-    arr.filter do |move|
-      !OwnChekmateChecker.will_cause_own_checkmate?(self, board, move[0], move[1])
+  end
+
+  def legal_moves(board)
+    raw_moves = available_moves(board)
+    en_passant = en_passant_moves(board)
+    raw_moves.filter do |raw_move|
+      if en_passant.include?(raw_move)
+        return !OwnChekmateChecker.en_passant_cause_own_checkmate?(self, board, raw_move[0],
+                                                                   raw_move[1])
+      end
+
+      !OwnChekmateChecker.will_cause_own_checkmate?(self, board, raw_move[0], raw_move[1])
     end
   end
 
@@ -59,7 +69,7 @@ class Pawn < Figure
     (position_history[0][1] - y).abs == 2
   end
 
-  def check_en_passant_moves(board)
+  def en_passant_moves(board)
     moves = []
     fields = board.fields
 

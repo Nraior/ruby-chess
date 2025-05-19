@@ -40,7 +40,7 @@ class King < Figure
       # we skip nil fields & same direction fields as it doesn't bother us
       next if figure.nil? || figure.direction == direction
 
-      enemy_figure_available_moves = figure.available_moves
+      enemy_figure_available_moves = figure.available_moves(board)
       return false if enemy_figure_available_moves.include?([next_x, next_y]) # results in check_mate, ignore
     end
     true

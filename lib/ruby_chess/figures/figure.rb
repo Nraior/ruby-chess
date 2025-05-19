@@ -16,8 +16,12 @@ class Figure
     @moves_count += 1
     @position_history.push([x, y])
 
-    @x = new_x
-    @y = new_y
+    update_pos(new_x, new_y)
+  end
+
+  def update_pos(x, y)
+    @x = x
+    @y = y
   end
 
   def symbol
@@ -26,6 +30,10 @@ class Figure
 
   def available_moves(board)
     []
+  end
+
+  def legal_moves(board)
+    available_moves(board)
   end
 
   def enemy?(other_figure)

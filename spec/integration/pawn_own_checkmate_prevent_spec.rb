@@ -31,7 +31,7 @@ describe Pawn do
       allow(OwnChekmateChecker).to receive(:en_passant_cause_own_checkmate?).and_call_original
     end
     it "doesn't return that move " do
-      moves = pawn.available_moves(board)
+      moves = pawn.legal_moves(board)
       expect(moves).to eq([])
     end
   end

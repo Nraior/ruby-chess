@@ -6,7 +6,11 @@ class Rook < Figure
   include DirectionCheckMove
 
   def available_moves(board)
-    moves = cross_move(board)
+    cross_move(board)
+  end
+
+  def legal_moves(board)
+    moves = available_moves(board)
     moves.filter do |move|
       !OwnChekmateChecker.will_cause_own_checkmate?(self, board, move[0], move[1])
     end
