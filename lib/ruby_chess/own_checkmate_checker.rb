@@ -1,8 +1,5 @@
 class OwnChekmateChecker
   def self.will_cause_own_checkmate?(moved_fig, board, new_x, new_y)
-    own_check = false
-    own_king = board.team_king(moved_fig.direction)
-
     # simulate move
     end_figure = board.figure_at_position(new_x, new_y)
     # remove initial pos
@@ -12,17 +9,9 @@ class OwnChekmateChecker
     # update to new pos
     board.update_inside_field_element(new_x, new_y, moved_fig)
     moved_fig.update_pos(new_x, new_y)
-    board.display
 
     # check if enemy figures checks own king
-    enemy_figs = board.team_figures(-moved_fig.direction)
-    enemy_figs.each do |enemy_figure|
-      next unless enemy_figure.available_moves(board).include?([own_king.x, own_king.y])
-
-      own_check = true
-      break
-    end
-    # reset to initial position
+    own_check = own_checkmate?(board, -moved_fig.direction)
     # update moved-to field to initial
     board.update_inside_field_element(new_x, new_y, end_figure)
     # update moved fig to initial
@@ -53,7 +42,7 @@ class OwnChekmateChecker
   private
 
   def self.own_checkmate?(board, enemy_direction)
-    enemy_figs = board.enemy_figures(enemy_direction)
+    enemy_figs = board.team_figures(enemy_direction)
     own_king = board.team_king(-enemy_direction)
     enemy_figs.each do |enemy_figure|
       next unless enemy_figure.available_moves(board).include?([own_king.x, own_king.y])
