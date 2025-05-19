@@ -1,3 +1,4 @@
+require_relative '../own_checkmate_checker'
 class Figure
   attr_reader :moves_count, :x, :y, :position_history, :direction
 
@@ -33,7 +34,10 @@ class Figure
   end
 
   def legal_moves(board)
-    available_moves(board)
+    moves = available_moves(board)
+    moves.filter do |move|
+      !OwnChekmateChecker.will_cause_own_checkmate?(self, board, move[0], move[1])
+    end
   end
 
   def enemy?(other_figure)
