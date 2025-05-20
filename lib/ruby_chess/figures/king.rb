@@ -2,7 +2,9 @@ require_relative './figure'
 require_relative './rook'
 class King < Figure
   def available_moves(board)
-    moves = standard_moves(board)
+    standard_moves = standard_moves(board)
+    castling_moves = castling_moves(board)
+    standard_moves.concat(castling_moves)
   end
 
   def is_checked?(board)
@@ -17,7 +19,6 @@ class King < Figure
         x_move = x + x_adder
         y_move = y + y_adder
         next unless board.valid_move?(x_move, y_move)
-        next unless move_not_check_mate?(board, x_move, y_move)
         next if is_self?(board, x_move, y_move)
 
         moves.push([x_move, y_move])
@@ -31,35 +32,35 @@ class King < Figure
     field.occupying == self
   end
 
-  def move_not_check_mate?(board, next_x, next_y)
-    fields = board.fields
-    # to consider: use only enemy figures
-    fields.flatten.each do |field|
-      figure = field.occupying
+  def castling_moves(board)
+    [castle_left_move(board), castle_right_move(board)]
+  end
 
-      # we skip nil fields & same direction fields as it doesn't bother us
-      next if figure.nil? || figure.direction == direction
+  def castle_left_move(board)
+    left_max = board.figure_at_position(0, y)
 
-      enemy_figure_available_moves = figure.available_moves(board)
-      return false if enemy_figure_available_moves.include?([next_x, next_y]) # results in check_mate, ignore
+    return [] unless  moves_count.zero? && left_max.is_a?(Rook) && left_max.moves_count.zero?
+
+    # loop to max left
+    (x - 1).downto(1) do |left_x|
+      return [] if board.any_team_figures_aims_at_pos?(left_x, y, -direction)
     end
-    true
+
+    # it's good, return castle move
+    [x - 2, y]
   end
 
-  def qualified_for_check_castle_left?(board)
-    left_max = board[y][0].occupying
+  def castle_right_move(board)
+    right_max = board.figure_at_position(board.width - 1, y)
 
-    left_is_rook = left_max.is_a? Rook
-    # left_max.
+    return [] unless moves_count.zero? && right_max.is_a?(Rook) && right_max.moves_count.zero?
 
-    moves_count == 0 && left_is_rook && left_max.moves_count == 0
-    # if ()
-  end
+    # loop to max left
+    (x - 1).upto(board.width - 1) do |right_x|
+      return [] if board.any_team_figures_aims_at_pos?(right_x, y, -direction)
+    end
 
-  def check_left_castle_path
-    # needs to check if path to rook is clear and any field DO NOT result in check
-  end
-
-  def castle_moves
+    # it's good, return castle move
+    [x + 2, y]
   end
 end

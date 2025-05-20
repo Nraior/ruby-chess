@@ -25,6 +25,9 @@ describe King do
     allow(board).to receive(:figure_at_position) do |x, y|
       board.fields[y][x].occupying
     end
+    allow(cross_figure).to receive(:moves_count).and_return(0)
+    allow(board).to receive(:any_team_figures_aims_at_pos?).and_return(false)
+    allow(board).to receive(:width).and_return(8)
   end
 
   context 'when its alone' do
@@ -43,7 +46,7 @@ describe King do
     end
     it 'returns castling moves' do
       moves = king.available_moves(board)
-      expect(moves).to eq([[2, 0], [3, 0], [5, 0], [6, 0]])
+      expect(moves).to eq([[3, 0], [5, 0], [2, 0], [6, 0]])
     end
   end
 

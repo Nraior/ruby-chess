@@ -57,6 +57,13 @@ class Board
     nil
   end
 
+  def any_team_figures_aims_at_pos?(pos_x, pos_y, team_direction)
+    figures = team_figures(team_direction)
+    figures.any? do |figure|
+      figure.available_moves.include?([pos_x, pos_y])
+    end
+  end
+
   def update_inside_field_element(x, y, figure = nil)
     fields[y][x].occupy(figure)
   end
