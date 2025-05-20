@@ -3,7 +3,7 @@ require_relative './rook'
 class King < Figure
   def available_moves(board)
     standard_moves = standard_moves(board)
-    castling_moves = castling_moves(board).reject(&:empty?)
+    castling_moves = castling_moves(board)
     standard_moves.concat(castling_moves)
   end
 
@@ -33,32 +33,31 @@ class King < Figure
   end
 
   def castling_moves(board)
-    [castle_left_move(board), castle_right_move(board)]
+    [castle_left_move(board), castle_right_move(board)].reject(&:empty?)
+  end
+
+  def castling_move_to_valid?(board, fig, loop)
+    return false unless moves_count.zero? && fig.is_a?(Rook) && fig.moves_count.zero?
+
+    loop.each do |checked_x|
+      return false if board.any_team_figures_aims_at_pos?(checked_x, y, -direction)
+    end
+    true
   end
 
   def castle_left_move(board)
-    left_max = board.figure_at_position(0, y)
+    fig = board.figure_at_position(0, y)
+    loop = (x - 1).downto(1)
+    return [] unless castling_move_to_valid?(board, fig, loop)
 
-    return [] unless  moves_count.zero? && left_max.is_a?(Rook) && left_max.moves_count.zero?
-
-    # loop to max left
-    (x - 1).downto(1) do |left_x|
-      return [] if board.any_team_figures_aims_at_pos?(left_x, y, -direction)
-    end
-
-    # it's good, return castle move
     [x - 2, y]
   end
 
   def castle_right_move(board)
-    right_max = board.figure_at_position(board.width - 1, y)
+    fig = board.figure_at_position(board.width - 1, y)
 
-    return [] unless moves_count.zero? && right_max.is_a?(Rook) && right_max.moves_count.zero?
-
-    # loop to max left
-    (x - 1).upto(board.width - 1) do |right_x|
-      return [] if board.any_team_figures_aims_at_pos?(right_x, y, -direction)
-    end
+    loop = (x - 1).upto(board.width - 1)
+    return [] unless castling_move_to_valid?(board, fig, loop)
 
     # it's good, return castle move
     [x + 2, y]
