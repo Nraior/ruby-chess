@@ -2,7 +2,7 @@ require './lib/ruby_chess/figures/king'
 require './lib/ruby_chess/figures/rook'
 
 describe King do
-  subject(:king) { described_class.new(2, 2, 1) }
+  subject(:king) { described_class.new(4, 0, 1) }
   let(:king_field) { double('king_field', { occupying: king }) }
   let(:board) { double('board') }
   let(:empty_field) { double('empty_field', { occupying: nil }) }
@@ -12,11 +12,9 @@ describe King do
   let(:own_field) { double('figure', { occupying: cross_figure }) }
 
   before do
-    allow(board).to receive(:fields).and_return([[empty_field, empty_field, empty_field, empty_field, empty_field],
-                                                 [empty_field, empty_field, empty_field, empty_field, empty_field],
-                                                 [empty_field, empty_field, king_field, empty_field, empty_field],
-                                                 [empty_field, empty_field, empty_field, empty_field, empty_field],
-                                                 [empty_field, empty_field, empty_field, empty_field, empty_field]])
+    allow(board).to receive(:fields).and_return([[own_field, empty_field, empty_field, empty_field, king_field, empty_field,
+                                                  empty_field, own_field]])
+
     allow(board).to receive(:valid_move?).and_return(true)
     allow(board).to receive(:valid_move?) do |x, y|
       x >= 0 && y >= 0 && y < board.fields.length && x < board.fields[0].length
@@ -31,17 +29,28 @@ describe King do
   end
 
   context 'when its alone' do
-    xit 'returns neighboring positions' do
+    subject(:king) { described_class.new(2, 2, 1) }
+
+    before do
+      allow(board).to receive(:fields).and_return([[empty_field, empty_field, empty_field, empty_field, empty_field],
+                                                   [empty_field, empty_field, empty_field, empty_field,
+                                                    empty_field],
+                                                   [empty_field, empty_field, king_field, empty_field, empty_field],
+                                                   [empty_field, empty_field, empty_field, empty_field,
+                                                    empty_field],
+                                                   [empty_field, empty_field, empty_field, empty_field,
+                                                    empty_field]])
+      allow(cross_figure)
+      allow(board).to receive(:width).and_return(5)
+    end
+    it 'returns neighboring positions' do
       moves = king.available_moves(board)
       expect(moves).to eq([[1, 1], [2, 1], [3, 1], [1, 2], [3, 2], [1, 3], [2, 3], [3, 3]])
     end
   end
 
   context 'when castling is available' do
-    subject(:king) { described_class.new(4, 0, 1) }
     before do
-      allow(board).to receive(:fields).and_return([[own_field, empty_field, empty_field, empty_field, king_field, empty_field,
-                                                    empty_field, own_field]])
       allow(cross_figure).to receive(:is_a?).with(Rook).and_return(true)
     end
     it 'returns castling moves' do
@@ -50,7 +59,7 @@ describe King do
     end
   end
 
-  context 'when king moved once' do
+  context 'when king already moved' do
     it "doesn't return castle moves" do
     end
   end

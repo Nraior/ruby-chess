@@ -2,12 +2,18 @@ require_relative 'field'
 require_relative './figures/king'
 
 class Board
-  attr_reader :fields, :width, :height
+  attr_reader :fields
 
   def initialize(width, height)
-    @width = width
-    @height = height
     @fields = []
+  end
+
+  def width(level = 0)
+    fields[level].length
+  end
+
+  def height
+    fields.length
   end
 
   def display

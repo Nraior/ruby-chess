@@ -3,7 +3,7 @@ require_relative './rook'
 class King < Figure
   def available_moves(board)
     standard_moves = standard_moves(board)
-    castling_moves = castling_moves(board)
+    castling_moves = castling_moves(board).reject(&:empty?)
     standard_moves.concat(castling_moves)
   end
 
