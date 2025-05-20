@@ -47,7 +47,7 @@ class King < Figure
 
   def castle_left_move(board)
     fig = board.figure_at_position(0, y)
-    loop = (x - 1).downto(1)
+    loop = x.downto(0)
     return [] unless castling_move_to_valid?(board, fig, loop)
 
     [x - 2, y]
@@ -56,7 +56,7 @@ class King < Figure
   def castle_right_move(board)
     fig = board.figure_at_position(board.width - 1, y)
 
-    loop = (x - 1).upto(board.width - 1)
+    loop = x.upto(board.width - 1)
     return [] unless castling_move_to_valid?(board, fig, loop)
 
     # it's good, return castle move
