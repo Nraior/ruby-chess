@@ -60,7 +60,7 @@ class Board
   def any_team_figures_aims_at_pos?(pos_x, pos_y, team_direction)
     figures = team_figures(team_direction)
     figures.any? do |figure|
-      figure.available_moves.include?([pos_x, pos_y])
+      figure.available_moves(self).include?([pos_x, pos_y])
     end
   end
 

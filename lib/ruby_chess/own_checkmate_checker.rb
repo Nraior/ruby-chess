@@ -39,16 +39,8 @@ class OwnChekmateChecker
     own_checkmate
   end
 
-  private
-
   def self.own_checkmate?(board, enemy_direction)
-    enemy_figs = board.team_figures(enemy_direction)
     own_king = board.team_king(-enemy_direction)
-    enemy_figs.each do |enemy_figure|
-      next unless enemy_figure.available_moves(board).include?([own_king.x, own_king.y])
-
-      return true
-    end
-    false
+    board.any_team_figures_aims_at_pos?(own_king.x, own_king.y, enemy_direction)
   end
 end
