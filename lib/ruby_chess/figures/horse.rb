@@ -19,4 +19,8 @@ class Horse < Figure
 
     [x + x_vector, y + y_vector] if fig.nil? || enemy?(fig)
   end
+
+  def symbol_pool
+    ['♘', '♞']
+  end
 end

@@ -36,6 +36,8 @@ class King < Figure
     [castle_left_move(board), castle_right_move(board)].reject(&:empty?)
   end
 
+  private
+
   def castling_move_to_valid?(board, fig, loop)
     return false unless moves_count.zero? && fig.is_a?(Rook) && fig.moves_count.zero?
 
@@ -61,5 +63,9 @@ class King < Figure
 
     # it's good, return castle move
     [x + 2, y]
+  end
+
+  def symbol_pool
+    ['♔', '♚']
   end
 end

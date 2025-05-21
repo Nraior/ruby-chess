@@ -11,6 +11,12 @@ class Field
     @occupying = figure
   end
 
+  def to_s
+    return @occupying.to_s unless @occupying.nil?
+
+    (@x + @y).even? ? ' ' : '░'
+  end
+
   def free
     @occupying = nil
   end

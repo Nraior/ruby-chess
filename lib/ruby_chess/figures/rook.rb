@@ -7,4 +7,8 @@ class Rook < Figure
   def available_moves(board)
     cross_move(board)
   end
+
+  def symbol_pool
+    ['♖', '♜']
+  end
 end

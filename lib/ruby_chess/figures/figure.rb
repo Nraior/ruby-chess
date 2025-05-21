@@ -26,7 +26,11 @@ class Figure
   end
 
   def symbol
-    @figure_controller.symbol
+    direction == 1 ? symbol_pool[0] : symbol_pool[1]
+  end
+
+  def to_s
+    symbol
   end
 
   def available_moves(board)
@@ -50,5 +54,11 @@ class Figure
     return false if other_figure.nil?
 
     other_figure.direction == direction
+  end
+
+  private
+
+  def symbol_pool
+    %w[x y]
   end
 end

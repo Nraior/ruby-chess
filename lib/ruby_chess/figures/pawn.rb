@@ -27,6 +27,21 @@ class Pawn < Figure
     end
   end
 
+  def available_kill_moves(board)
+    moves = []
+    left_figure = board.figure_at_position(@x - 1, @y + @direction)
+    right_figure = board.figure_at_position(@x + 1, @y + @direction)
+
+    enemy_forward_left = enemy?(left_figure) if left_figure
+    enemy_forward_right = enemy?(right_figure) if right_figure
+
+    moves.push([@x - 1, @y + @direction]) if enemy_forward_left
+    moves.push([@x + 1, @y + @direction]) if enemy_forward_right
+    moves
+  end
+
+  private
+
   def forward_moves(board)
     moves = []
     fields = board.fields
@@ -47,19 +62,6 @@ class Pawn < Figure
 
       moves.push([x_pos, n])
     end
-    moves
-  end
-
-  def available_kill_moves(board)
-    moves = []
-    left_figure = board.figure_at_position(@x - 1, @y + @direction)
-    right_figure = board.figure_at_position(@x + 1, @y + @direction)
-
-    enemy_forward_left = enemy?(left_figure) if left_figure
-    enemy_forward_right = enemy?(right_figure) if right_figure
-
-    moves.push([@x - 1, @y + @direction]) if enemy_forward_left
-    moves.push([@x + 1, @y + @direction]) if enemy_forward_right
     moves
   end
 
@@ -85,5 +87,9 @@ class Pawn < Figure
     moves.filter do |en_passant_move|
       !OwnChekmateChecker.en_passant_cause_own_checkmate?(self, board, en_passant_move[0], en_passant_move[1])
     end
+  end
+
+  def symbol_pool
+    ['♙', '♟']
   end
 end
