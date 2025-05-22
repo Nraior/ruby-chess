@@ -28,7 +28,7 @@ class OwnChekmateChecker
 
     # simulate move
     end_figure = board.figure_at_position(new_x, new_y)
-    board.update_inside_field_element(new_x, new_y, self)
+    board.update_inside_field_element(new_x, new_y, moved_fig)
     # analyze board
     #
     own_checkmate = own_checkmate?(board, -moved_fig.direction)

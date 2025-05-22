@@ -28,7 +28,7 @@ class MoveController
     return false unless figure.is_a? Pawn
 
     en_passant = figure.en_passant_moves(board)
-    en_passant.include?(move) && board.figure_at_position(move).nil? # we can't kill 2 figures with en passant move
+    en_passant.include?(move) && board.figure_at_position(move[0], move[1]).nil? # we can't kill 2 figures with en passant move
   end
 
   def make_en_passant_move(board, figure, move)
@@ -42,6 +42,7 @@ class MoveController
     # evaluate direction
     is_left = (king.x - move[0]) > 0
 
+    # move castle
     if is_left
       left_rook = board.figure_at_position(0, king.y)
       make_standard_move(board, left_rook, [move[0] + 1, move[1]])
@@ -52,7 +53,5 @@ class MoveController
 
     # move king
     make_standard_move(board, king, move)
-
-    # move castle
   end
 end

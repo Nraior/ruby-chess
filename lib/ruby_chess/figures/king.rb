@@ -34,8 +34,6 @@ class King < Figure
     field.occupying == self
   end
 
-  private
-
   def castling_move_to_valid?(board, fig, loop)
     return false unless moves_count.zero? && fig.is_a?(Rook) && fig.moves_count.zero?
 
