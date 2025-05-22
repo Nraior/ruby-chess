@@ -7,7 +7,7 @@ class King < Figure
     standard_moves.concat(castling_moves)
   end
 
-  def castling_moves(board, skip_check = true)
+  def castling_moves(board)
     [castle_left_move(board), castle_right_move(board)].reject(&:empty?)
   end
 
