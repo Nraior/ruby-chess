@@ -45,6 +45,24 @@ class Pawn < Figure
     (position_history[0][1] - y).abs == 2
   end
 
+  def en_passant_moves(board)
+    moves = []
+    fields = board.fields
+
+    left = fields[@y][@x - 1].occupying if enemy?(board.figure_at_position(@x - 1, @y))
+    right = fields[@y][@x + 1].occupying if enemy?(board.figure_at_position(@x + 1, @y))
+
+    valid_left = left&.is_a?(self.class) && left.last_move_double_forward?
+    valid_right = right&.is_a?(self.class) && right.last_move_double_forward?
+
+    moves.push([@x - 1, @y + direction]) if valid_left
+    moves.push([@x + 1, @y + direction]) if valid_right
+
+    moves.filter do |en_passant_move|
+      !OwnChekmateChecker.en_passant_cause_own_checkmate?(self, board, en_passant_move[0], en_passant_move[1])
+    end
+  end
+
   private
 
   def forward_moves(board)
@@ -68,24 +86,6 @@ class Pawn < Figure
       moves.push([x_pos, n])
     end
     moves
-  end
-
-  def en_passant_moves(board)
-    moves = []
-    fields = board.fields
-
-    left = fields[@y][@x - 1].occupying if enemy?(board.figure_at_position(@x - 1, @y))
-    right = fields[@y][@x + 1].occupying if enemy?(board.figure_at_position(@x + 1, @y))
-
-    valid_left = left&.is_a?(self.class) && left.last_move_double_forward?
-    valid_right = right&.is_a?(self.class) && right.last_move_double_forward?
-
-    moves.push([@x - 1, @y + direction]) if valid_left
-    moves.push([@x + 1, @y + direction]) if valid_right
-
-    moves.filter do |en_passant_move|
-      !OwnChekmateChecker.en_passant_cause_own_checkmate?(self, board, en_passant_move[0], en_passant_move[1])
-    end
   end
 
   def symbol_pool

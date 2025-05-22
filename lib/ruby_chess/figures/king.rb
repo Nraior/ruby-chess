@@ -7,10 +7,9 @@ class King < Figure
     standard_moves.concat(castling_moves)
   end
 
-  def is_checked?(board)
+  def castling_moves(board, skip_check = true)
+    [castle_left_move(board), castle_right_move(board)].reject(&:empty?)
   end
-
-  private
 
   def standard_moves(board)
     moves = []
@@ -20,6 +19,7 @@ class King < Figure
         y_move = y + y_adder
         next unless board.valid_move?(x_move, y_move)
         next if is_self?(board, x_move, y_move)
+        next if ally?(board.figure_at_position(x_move, y_move))
 
         moves.push([x_move, y_move])
       end
@@ -27,13 +27,11 @@ class King < Figure
     moves
   end
 
+  private
+
   def is_self?(board, next_x, next_y)
     field = board.fields[next_y][next_x]
     field.occupying == self
-  end
-
-  def castling_moves(board)
-    [castle_left_move(board), castle_right_move(board)].reject(&:empty?)
   end
 
   private
@@ -42,6 +40,7 @@ class King < Figure
     return false unless moves_count.zero? && fig.is_a?(Rook) && fig.moves_count.zero?
 
     loop.each do |checked_x|
+      return false if ally?(board.figure_at_position(checked_x, y))
       return false if board.any_team_figures_aims_at_pos?(checked_x, y, -direction)
     end
     true
@@ -49,7 +48,7 @@ class King < Figure
 
   def castle_left_move(board)
     fig = board.figure_at_position(0, y)
-    loop = x.downto(0)
+    loop = (x - 1).downto(1)
     return [] unless castling_move_to_valid?(board, fig, loop)
 
     [x - 2, y]
@@ -58,7 +57,7 @@ class King < Figure
   def castle_right_move(board)
     fig = board.figure_at_position(board.width - 1, y)
 
-    loop = x.upto(board.width - 1)
+    loop = (x + 1).upto(board.width - 2)
     return [] unless castling_move_to_valid?(board, fig, loop)
 
     # it's good, return castle move

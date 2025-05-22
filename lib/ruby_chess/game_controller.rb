@@ -1,11 +1,12 @@
 require_relative './input_converter'
 class GameController
-  def initialize(players, board)
+  def initialize(players, board, move_controller)
     @board = board
     @players = players
     @running = false
     @round = 0
     @converter = InputConverter.new
+    @move_controller = move_controller
   end
 
   def start_game
@@ -49,9 +50,11 @@ class GameController
         p 'VALID MOVE, YAY'
 
         # process move
-        @board.update_inside_field_element(figure_move[0], figure_move[1], nil)
-        @board.update_inside_field_element(move[0], move[1], figure)
-        figure.proceed_move(move[0], move[1])
+
+        @move_controller.handle_move(@board, figure, move)
+        # @board.update_inside_field_element(figure_move[0], figure_move[1], nil)
+        # @board.update_inside_field_element(move[0], move[1], figure)
+        # figure.proceed_move(move[0], move[1])
         #
         # validate used move
         # "We ve got valid figure, so"
