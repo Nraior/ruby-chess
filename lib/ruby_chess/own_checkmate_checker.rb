@@ -24,7 +24,7 @@ class OwnChekmateChecker
   def self.en_passant_cause_own_checkmate?(moved_fig, board, new_x, new_y, direction = 1)
     killed_figure = board.figure_at_position(new_x, new_y + direction)
     # simulate kill figure
-    board.update_inside_field_element(new_x, new_y + direction, nil)
+    board.update_inside_field_element(new_x, new_y - moved_fig.direction, nil)
 
     # simulate move
     end_figure = board.figure_at_position(new_x, new_y)

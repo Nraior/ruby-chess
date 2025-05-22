@@ -1,6 +1,5 @@
 require_relative '../own_checkmate_checker'
 require_relative '../modules/chess_teams'
-require_relative '../modules/chess_teams'
 class Figure
   attr_reader :moves_count, :x, :y, :position_history, :direction
 

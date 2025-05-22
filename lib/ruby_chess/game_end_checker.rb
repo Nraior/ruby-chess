@@ -11,21 +11,21 @@ class GameEndChecker
     up_has_moves = false
     bottom_has_moves = false
     bottom_team.each do |fig|
-      moves = fig.available_moves(board)
+      moves = fig.legal_moves(board)
       up_team_king_pos = [up_team_king.x, up_team_king.y]
       up_checked = true if moves.include?(up_team_king_pos)
       bottom_has_moves = true if moves.length > 0
     end
 
     up_team.each do |fig|
-      moves = fig.available_moves(board)
+      moves = fig.legal_moves(board)
       bottom_team_king_pos = [bottom_team_king.x, bottom_team_king.y]
       bottom_checked = true if moves.include?(bottom_team_king_pos)
       up_has_moves = true if moves.length > 0
     end
 
-    return ChessTeams::BOTTOM_TEAM if up_checked && bottom_has_moves
-    return ChessTeams::UP_TEAM if bottom_checked && up_has_moves
+    return ChessTeams::BOTTOM_TEAM if up_checked && !up_has_moves
+    return ChessTeams::UP_TEAM if bottom_checked && !bottom_has_moves
 
     return 0 if !up_has_moves && !bottom_has_moves
 

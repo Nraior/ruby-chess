@@ -20,17 +20,13 @@ class GameController
 
   def game_loop
     while @running
-      p 'yay'
-
       loop do
         @board.display
 
         puts 'Choose figure using X Y coordinates'
         puts "Current Team: #{current_player_direction == 1 ? 'Up' : 'Bottom'}"
         player_input = current_player.input
-        p player_input
         if player_input == 'save'
-          # handle serialization
           p 'Handle serialization'
           next
         end
