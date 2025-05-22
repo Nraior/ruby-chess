@@ -1,14 +1,15 @@
 require './lib/ruby_chess/figures/king'
 require './lib/ruby_chess/figures/rook'
+require './lib/ruby_chess/modules/chess_teams'
 
 describe King do
   subject(:king) { described_class.new(4, 0, 1) }
   let(:king_field) { double('king_field', { occupying: king }) }
   let(:board) { double('board') }
   let(:empty_field) { double('empty_field', { occupying: nil }) }
-  let(:occupied_figure) { double('pawn', { direction: -1 }) }
+  let(:occupied_figure) { double('pawn', { direction: ChessTeams::BOTTOM_TEAM }) }
   let(:another_figure) { double('figure', { occupying: occupied_figure }) }
-  let(:cross_figure) { double('rook', { direction: 1 }) }
+  let(:cross_figure) { double('rook', { direction: ChessTeams::UP_TEAM }) }
   let(:own_field) { double('figure', { occupying: cross_figure }) }
 
   before do
@@ -30,7 +31,7 @@ describe King do
   end
 
   context 'when its alone' do
-    subject(:king) { described_class.new(2, 2, 1) }
+    subject(:king) { described_class.new(2, 2, ChessTeams::UP_TEAM) }
 
     before do
       allow(board).to receive(:fields).and_return([[empty_field, empty_field, empty_field, empty_field, empty_field],
@@ -79,7 +80,7 @@ describe King do
   end
 
   context 'when one rook moved once' do
-    let(:cross_figure_2) { double('rook', { direction: 1 }) }
+    let(:cross_figure_2) { double('rook', { direction: ChessTeams::UP_TEAM }) }
     let(:own_field_2) { double('figure', { occupying: cross_figure_2 }) }
 
     before do
@@ -95,8 +96,8 @@ describe King do
   end
 
   context 'when road to castle is checked' do
-    subject(:king) { described_class.new(4, 1, 1) }
-    let(:enemy_blocking_field) { double('enemy_blocking_field', { direction: -1 }) }
+    subject(:king) { described_class.new(4, 1, ChessTeams::UP_TEAM) }
+    let(:enemy_blocking_field) { double('enemy_blocking_field', { direction: ChessTeams::BOTTOM_TEAM }) }
     let(:enemy_cross_field) { double('figure', { occupying: enemy_blocking_field }) }
     before do
       allow(board).to receive(:fields).and_return([[empty_field, empty_field, empty_field, empty_field, empty_field, empty_field,

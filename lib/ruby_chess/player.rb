@@ -6,6 +6,6 @@ class Player
   end
 
   def input
-    gets
+    gets.chomp
   end
 end

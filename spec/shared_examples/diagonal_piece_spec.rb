@@ -1,10 +1,12 @@
+require './lib/ruby_chess/modules/chess_teams'
+
 RSpec.shared_examples 'diagonal piece' do
   subject(:bishop) { described_class.new(2, 2, 1) }
   let(:board) { double('board') }
   let(:empty_field) { double('empty_field', { occupying: nil }) }
-  let(:occupied_figure) { double('pawn', { direction: -1 }) }
+  let(:occupied_figure) { double('pawn', { direction: ChessTeams::BOTTOM_TEAM }) }
   let(:enemy_field) { double('figure', { occupying: occupied_figure }) }
-  let(:own_pawn) { double('pawn', { direction: 1 }) }
+  let(:own_pawn) { double('pawn', { direction: ChessTeams::UP_TEAM }) }
   let(:own_field) { double('figure', { occupying: own_pawn }) }
 
   before do

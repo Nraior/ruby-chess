@@ -1,9 +1,10 @@
 require_relative '../lib/ruby_chess/figures/horse'
+require_relative '../lib/ruby_chess/modules/chess_teams'
 describe Horse do
   subject(:horse) { described_class.new(2, 2, 1) }
   let(:board) { double('board') }
   let(:empty_field) { double('empty_field', { occupying: nil }) }
-  let(:occupied_figure) { double('pawn', { direction: -1 }) }
+  let(:occupied_figure) { double('pawn', { direction: ChessTeams::BOTTOM_TEAM }) }
   let(:another_figure) { double('figure', { occupying: occupied_figure }) }
 
   before do
@@ -47,7 +48,7 @@ describe Horse do
   end
 
   context 'when allies are on positions' do
-    let(:occupied_figure) { double('pawn', { direction: 1 }) }
+    let(:occupied_figure) { double('pawn', { direction: ChessTeams::UP_TEAM }) }
     let(:own_figure) { double('figure', { occupying: occupied_figure }) }
 
     before do

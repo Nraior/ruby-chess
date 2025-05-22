@@ -1,6 +1,6 @@
 class InputConverter
   def input_to_figure(input, board)
-    numbers = input.strip.split
+    numbers = input.split
     return nil if numbers.length < 2
 
     return nil unless valid_number?(numbers[0]) && valid_number?(numbers[1])
@@ -9,7 +9,7 @@ class InputConverter
   end
 
   def input_to_array(input)
-    numbers = input.strip.split
+    numbers = input.split
     return nil if numbers.length < 2
 
     return nil unless valid_number?(numbers[0]) && valid_number?(numbers[1])

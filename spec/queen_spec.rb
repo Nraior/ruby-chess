@@ -1,11 +1,12 @@
 require './lib/ruby_chess/figures/queen'
+require './lib/ruby_chess/modules/chess_teams'
 
 describe Queen do
   describe '#available_moves' do
-    subject(:queen) { described_class.new(2, 2, 1) }
+    subject(:queen) { described_class.new(2, 2, ChessTeams::UP_TEAM) }
     let(:board) { double('board') }
     let(:empty_field) { double('empty_field', { occupying: nil }) }
-    let(:occupied_figure) { double('pawn', { direction: -1 }) }
+    let(:occupied_figure) { double('pawn', { direction: ChessTeams::BOTTOM_TEAM }) }
     let(:another_figure) { double('figure', { occupying: occupied_figure }) }
 
     before do
@@ -48,7 +49,7 @@ describe Queen do
     end
 
     context 'when its blocked by own figures' do
-      let(:occupied_figure) { double('pawn', { direction: 1 }) }
+      let(:occupied_figure) { double('pawn', { direction: ChessTeams::UP_TEAM }) }
       let(:own_figure) { double('figure', { occupying: occupied_figure }) }
 
       before do

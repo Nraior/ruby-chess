@@ -3,13 +3,14 @@ require './lib/ruby_chess/figures/king'
 require './lib/ruby_chess/figures/rook'
 require './lib/ruby_chess/board'
 require './lib/ruby_chess/field'
+require './lib/ruby_chess/modules/chess_teams'
 
 describe Pawn do
   let(:king) { King.new(0, 0, - 1) }
-  let(:enemy_rook_first) { Rook.new(1, 0, 1) }
-  let(:enemy_rook_second) { Rook.new(2, 0, 1) }
+  let(:enemy_rook_first) { Rook.new(1, 0, ChessTeams::UP_TEAM) }
+  let(:enemy_rook_second) { Rook.new(2, 0, ChessTeams::UP_TEAM) }
   let(:board) { Board.new(2, 2) }
-  subject(:pawn) { described_class.new(1, 1, -1) }
+  subject(:pawn) { described_class.new(1, 1, ChessTeams::BOTTOM_TEAM) }
   let(:pawn_field) { Field.new(nil, nil) }
   let(:king_field) { Field.new(nil, nil) }
   let(:enemy_rook_field_first) { Field.new(nil, nil) }
@@ -35,8 +36,8 @@ describe Pawn do
   end
 
   context 'when already blocking checkmate' do
-    let(:enemy_rook_first) { Rook.new(3, 1, 1) }
-    let(:king) { King.new(0, 1, - 1) }
+    let(:enemy_rook_first) { Rook.new(3, 1, ChessTeams::UP_TEAM) }
+    let(:king) { King.new(0, 1, ChessTeams::BOTTOM_TEAM) }
 
     before do
       allow(board).to receive(:fields).and_return([[Field.new(nil, nil), Field.new(nil, nil), Field.new(nil, nil), Field.new(nil, nil)],
@@ -51,8 +52,8 @@ describe Pawn do
   end
 
   context 'when can prevent checkmate by kill' do
-    let(:enemy_rook_first) { Rook.new(0, 0, 1) }
-    let(:king) { King.new(0, 1, - 1) }
+    let(:enemy_rook_first) { Rook.new(0, 0, ChessTeams::UP_TEAM) }
+    let(:king) { King.new(0, 1, ChessTeams::BOTTOM_TEAM) }
 
     before do
       allow(board).to receive(:fields).and_return([[Field.new(nil, nil), Field.new(nil, nil)],

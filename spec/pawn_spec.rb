@@ -1,10 +1,11 @@
 require './lib/ruby_chess/figures/pawn'
+require './lib/ruby_chess/modules/chess_teams'
 describe Pawn do
-  subject(:pawn) { described_class.new(1, 3, -1) }
+  subject(:pawn) { described_class.new(1, 3, ChessTeams::BOTTOM_TEAM) }
   let(:occupied_figure) { instance_double(Pawn, direction: 1, position_history: [[0, 0]]) }
   let(:another_figure) { double('figure', { occupying: occupied_figure }) }
   let(:empty_field) { double('empty_field', { occupying: nil }) }
-  let(:king) { double('king', { direction: -1 }) }
+  let(:king) { double('king', { direction: ChessTeams::BOTTOM_TEAM }) }
   let(:king_field) { double('empty_field', { occupying: king }) }
   let(:board) { double('board') }
   describe '#available_moves' do
@@ -33,7 +34,7 @@ describe Pawn do
     end
 
     context('when its blocked and pawn is at the top') do
-      subject(:pawn) { described_class.new(1, 0, 1) }
+      subject(:pawn) { described_class.new(1, 0, ChessTeams::UP_TEAM) }
 
       before do
         allow(board).to receive(:fields).and_return([[empty_field, pawn, empty_field],
@@ -89,7 +90,7 @@ describe Pawn do
     end
 
     context 'en passant' do
-      let(:occupied_figure) { Pawn.new(0, 0, 1) }
+      let(:occupied_figure) { Pawn.new(0, 0, ChessTeams::UP_TEAM) }
       let(:another_figure) { double('figure', { occupying: occupied_figure }) }
 
       before do

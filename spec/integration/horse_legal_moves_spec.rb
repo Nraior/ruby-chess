@@ -3,15 +3,16 @@ require './lib/ruby_chess/figures/rook'
 require './lib/ruby_chess/figures/horse'
 require './lib/ruby_chess/board'
 require './lib/ruby_chess/field'
+require './lib/ruby_chess/modules/chess_teams'
 
 describe Horse do
-  subject(:horse) { described_class.new(2, 2, -1) }
+  subject(:horse) { described_class.new(2, 2, ChessTeams::BOTTOM_TEAM) }
   let(:horse_field) { Field.new(nil, nil) }
   let(:king_field) { Field.new(nil, nil) }
   let(:enemy_rook_field) { Field.new(nil, nil) }
 
-  let(:king) { King.new(0, 0, -1) }
-  let(:enemy_rook) { Rook.new(4, 0, 1) }
+  let(:king) { King.new(0, 0, ChessTeams::BOTTOM_TEAM) }
+  let(:enemy_rook) { Rook.new(4, 0, ChessTeams::UP_TEAM) }
 
   let(:board) { Board.new(4, 2) }
 
@@ -38,7 +39,7 @@ describe Horse do
   end
 
   context 'when can prevent checkmate by kill' do
-    let(:enemy_rook) { Rook.new(0, 1, 1) }
+    let(:enemy_rook) { Rook.new(0, 1, ChessTeams.UP_TEAM) }
     before do
       allow(board).to receive(:fields).and_return([[king_field, Field.new(nil, nil), Field.new(nil, nil), Field.new(nil, nil), Field.new(nil, nil)],
                                                    [enemy_rook_field, Field.new(nil, nil), Field.new(nil, nil),
@@ -58,9 +59,9 @@ describe Horse do
   end
 
   context 'when already preventing checkmate' do
-    subject(:horse) { described_class.new(1, 0, -1) }
-    let(:king) { King.new(0, 0, -1) }
-    let(:enemy_rook) { Rook.new(4, 0, 1) }
+    subject(:horse) { described_class.new(1, 0, ChessTeams::BOTTOM_TEAM) }
+    let(:king) { King.new(0, 0, ChessTeams::BOTTOM_TEAM) }
+    let(:enemy_rook) { Rook.new(4, 0, ChessTeams::UP_TEAM) }
     before do
       allow(board).to receive(:fields).and_return([[king_field, horse_field, Field.new(nil, nil), Field.new(nil, nil), enemy_rook_field],
                                                    [Field.new(nil, nil), Field.new(nil, nil), Field.new(nil, nil),
@@ -80,10 +81,10 @@ describe Horse do
   end
 
   context 'when cant prevent checkmate' do
-    let(:enemy_rook) { Rook.new(0, 2, 1) }
-    let(:king) { King.new(0, 0, -1) }
+    let(:enemy_rook) { Rook.new(0, 2, ChessTeams::UP_TEAM) }
+    let(:king) { King.new(0, 0, ChessTeams::BOTTOM_TEAM) }
 
-    subject(:horse) { described_class.new(1, 1, -1) }
+    subject(:horse) { described_class.new(1, 1, ChessTeams::BOTTOM_TEAM) }
     before do
       allow(board).to receive(:fields).and_return([[king_field, Field.new(nil, nil), Field.new(nil, nil), Field.new(nil, nil), Field.new(nil, nil)],
                                                    [Field.new(nil, nil), Field.new(nil, nil), Field.new(nil, nil),

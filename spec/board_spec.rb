@@ -1,5 +1,6 @@
 require './lib/ruby_chess/board'
 require './lib/ruby_chess/field'
+require './lib/ruby_chess/modules/chess_teams'
 
 describe Board do
   subject(:board) { described_class.new(8, 8) }
@@ -66,7 +67,7 @@ describe Board do
   end
 
   describe '#team_figures' do
-    let(:enemy_figure) { double('pawn', { direction: -1 }) }
+    let(:enemy_figure) { double('pawn', { direction: ChessTeams::BOTTOM_TEAM }) }
     let(:enemy_field) { double('figure', { occupying: enemy_figure }) }
     let(:own_pawn) { double('pawn', { direction: 1 }) }
     let(:own_field) { double('figure', { occupying: own_pawn }) }
@@ -87,16 +88,16 @@ describe Board do
 
     context 'when asking for enemy fields' do
       it 'returns enemy figures' do
-        figures = board.team_figures(-1)
+        figures = board.team_figures(ChessTeams::BOTTOM_TEAM)
         expect(figures).to eq([enemy_figure, enemy_figure])
       end
     end
   end
 
   describe '#team_king' do
-    let(:own_king) { double('own_king', { direction: 1 }) }
+    let(:own_king) { double('own_king', { direction: ChessTeams::UP_TEAM }) }
     let(:own_king_figure) { double('own_king_field', { occupying: own_king }) }
-    let(:enemy_king) { double('enemy_king', { direction: -1 }) }
+    let(:enemy_king) { double('enemy_king', { direction: ChessTeams::BOTTOM_TEAM }) }
     let(:enemy_king_figure) { double('enemy_king_field', { occupying: enemy_king }) }
 
     before do
@@ -107,14 +108,14 @@ describe Board do
 
     context 'when asking for own king' do
       it 'returns own king' do
-        king = board.team_king(1)
+        king = board.team_king(ChessTeams::UP_TEAM)
         expect(king).to eq(own_king)
       end
     end
 
     context 'when asking for enemy king' do
       it 'returns enemy king' do
-        king = board.team_king(-1)
+        king = board.team_king(ChessTeams::BOTTOM_TEAM)
         expect(king).to eq(enemy_king)
       end
     end

@@ -10,6 +10,7 @@ class GameController
 
   def start_game
     @running = true
+    # Check for deserialize
     game_loop
   end
 
@@ -17,12 +18,17 @@ class GameController
     while @running
       p 'yay'
 
-      while true
+      loop do
         @board.display
 
         puts 'Choose figure using X Y coordinates'
         player_input = current_player.input
-
+        p player_input
+        if player_input == 'save'
+          # handle serialization
+          p 'Handle serialization'
+          next
+        end
         figure = @converter.input_to_figure(player_input, @board)
         # input_to_array
         figure_move = @converter.input_to_array(player_input)
@@ -30,7 +36,7 @@ class GameController
         next if figure.nil? # validator class maybe
 
         available_moves = figure.available_moves(@board)
-        next if available_moves.length == 0
+        next if available_moves.length.zero?
 
         puts 'Choose move'
         puts "Available moves: #{available_moves}"
@@ -45,17 +51,17 @@ class GameController
         # process move
         @board.update_inside_field_element(figure_move[0], figure_move[1], nil)
         @board.update_inside_field_element(move[0], move[1], figure)
-
         figure.proceed_move(move[0], move[1])
         #
         # validate used move
         # "We ve got valid figure, so"
         @board.display
-
+        break
       end
       # validate input
-
       next_move
+      handle_game_win if game_won?
+      draw if game_draw?
     end
   end
 

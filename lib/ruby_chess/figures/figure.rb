@@ -1,8 +1,10 @@
 require_relative '../own_checkmate_checker'
+require_relative '../modules/chess_teams'
+require_relative '../modules/chess_teams'
 class Figure
   attr_reader :moves_count, :x, :y, :position_history, :direction
 
-  def initialize(current_x, current_y, direction = -1)
+  def initialize(current_x, current_y, direction = ChessTeams::BOTTOM_TEAM)
     @direction = direction
     @x = current_x
     @y = current_y
@@ -26,7 +28,7 @@ class Figure
   end
 
   def symbol
-    direction == 1 ? symbol_pool[0] : symbol_pool[1]
+    direction == ChessTeams::UP_TEAM ? symbol_pool[0] : symbol_pool[1]
   end
 
   def to_s
