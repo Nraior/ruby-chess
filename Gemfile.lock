@@ -2,9 +2,15 @@ GEM
   remote: https://rubygems.org/
   specs:
     ast (2.4.3)
+    bigdecimal (3.1.9)
     json (2.11.3)
     language_server-protocol (3.17.0.4)
     lint_roller (1.1.0)
+    msgpack (1.8.0)
+    oj (3.16.10)
+      bigdecimal (>= 3.0)
+      ostruct (>= 0.2)
+    ostruct (0.6.1)
     parallel (1.27.0)
     parser (3.3.8.0)
       ast (~> 2.4.1)
@@ -37,6 +43,8 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  msgpack (~> 1.8)
+  oj (~> 3.16)
   rubocop (~> 1.75)
 
 BUNDLED WITH

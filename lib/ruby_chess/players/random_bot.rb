@@ -21,6 +21,7 @@ class RandomBot < Player
 
       @selected_figure = acceptable_figures.sample
       @selecting_figure = !@selecting_figure
+      "#{@selected_figure.x} #{@selected_figure.y}"
     else
 
       @selecting_figure = !@selecting_figure

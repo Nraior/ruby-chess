@@ -3,7 +3,7 @@ require_relative './figures/pawn'
 
 class MoveController
   def handle_move(board, figure, move)
-    if is_castle_move?(figure, board, move)
+    if castle_move?(figure, board, move)
       make_castle_move(board, figure, move)
     elsif en_passant_move?(board, figure, move)
       make_en_passant_move(board, figure, move)
@@ -18,7 +18,7 @@ class MoveController
     figure.proceed_move(move[0], move[1])
   end
 
-  def is_castle_move?(figure, board, move)
+  def castle_move?(figure, board, move)
     return false unless figure.is_a? King
 
     figure.castling_moves(board).include?(move)
@@ -40,10 +40,10 @@ class MoveController
 
   def make_castle_move(board, king, move)
     # evaluate direction
-    is_left = (king.x - move[0]) > 0
+    is_left = (king.x - move[0]).positive?
 
     # move castle
-    if is_left
+    if (king.x - move[0]).positive?
       left_rook = board.figure_at_position(0, king.y)
       make_standard_move(board, left_rook, [move[0] + 1, move[1]])
     else
