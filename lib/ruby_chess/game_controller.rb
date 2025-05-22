@@ -20,16 +20,20 @@ class GameController
       while true
         @board.display
 
+        puts 'Choose figure using X Y coordinates'
         player_input = current_player.input
 
         figure = @converter.input_to_figure(player_input, @board)
+        # input_to_array
+        figure_move = @converter.input_to_array(player_input)
+
         next if figure.nil? # validator class maybe
 
         available_moves = figure.available_moves(@board)
         next if available_moves.length == 0
 
-        p "available moves: #{figure.available_moves(@board)}"
-
+        puts 'Choose move'
+        puts "Available moves: #{available_moves}"
         move_input = current_player.input
         move = @converter.input_to_array(move_input)
 
@@ -39,6 +43,10 @@ class GameController
         p 'VALID MOVE, YAY'
 
         # process move
+        @board.update_inside_field_element(figure_move[0], figure_move[1], nil)
+        @board.update_inside_field_element(move[0], move[1], figure)
+
+        figure.proceed_move(move[0], move[1])
         #
         # validate used move
         # "We ve got valid figure, so"
