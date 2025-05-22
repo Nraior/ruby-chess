@@ -31,13 +31,18 @@ class Pawn < Figure
     moves = []
     left_figure = board.figure_at_position(@x - 1, @y + @direction)
     right_figure = board.figure_at_position(@x + 1, @y + @direction)
-
     enemy_forward_left = enemy?(left_figure) if left_figure
     enemy_forward_right = enemy?(right_figure) if right_figure
 
     moves.push([@x - 1, @y + @direction]) if enemy_forward_left
     moves.push([@x + 1, @y + @direction]) if enemy_forward_right
     moves
+  end
+
+  def last_move_double_forward?
+    return false if position_history.length != 1
+
+    (position_history[0][1] - y).abs == 2
   end
 
   private
@@ -63,12 +68,6 @@ class Pawn < Figure
       moves.push([x_pos, n])
     end
     moves
-  end
-
-  def last_move_double_forward?
-    return false if position_history.length != 1
-
-    (position_history[0][1] - y).abs == 2
   end
 
   def en_passant_moves(board)

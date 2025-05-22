@@ -93,11 +93,11 @@ class Board
 
     # bottom
     fields[height - 2].each_with_index do |pawn_field, x|
-      pawn_field.occupy(Pawn.new(x, 1))
+      pawn_field.occupy(Pawn.new(x, height - 2))
     end
 
     fields[height - 1].each_with_index do |field, index|
-      field.occupy(bottom_team_figs[index].new(index, 0))
+      field.occupy(bottom_team_figs[index].new(index, height - 1))
     end
   end
 
